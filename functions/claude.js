@@ -1,10 +1,5 @@
-export async function onRequest(context) {
+export async function onRequestPost(context) {
   const { request, env } = context;
-  
-  if (request.method === 'OPTIONS') {
-    return new Response('', { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'POST, OPTIONS' } });
-  }
-
   const payload = await request.json();
   
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -18,5 +13,10 @@ export async function onRequest(context) {
   });
 
   const data = await response.text();
-  return new Response(data, { headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' } });
+  return new Response(data, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json'
+    }
+  });
 }
