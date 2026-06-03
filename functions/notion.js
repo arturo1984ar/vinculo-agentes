@@ -1,14 +1,9 @@
-export async function onRequest(context) {
+export async function onRequestPost(context) {
   const { request, env } = context;
-  
-  if (request.method === 'OPTIONS') {
-    return new Response('', { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type', 'Access-Control-Allow-Methods': 'POST, OPTIONS' } });
-  }
-
   const { path, method, body } = await request.json();
   
   const response = await fetch('https://api.notion.com' + path, {
-    method: method || 'GET',
+    method: method || 'POST',
     headers: {
       'Authorization': 'Bearer ' + env.NOTION_TOKEN,
       'Content-Type': 'application/json',
@@ -18,5 +13,10 @@ export async function onRequest(context) {
   });
 
   const data = await response.text();
-  return new Response(data, { headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' } });
+  return new Response(data, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json'
+    }
+  });
 }
