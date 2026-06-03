@@ -179,11 +179,11 @@ uploadArea.addEventListener("drop", e => {
   }
 });
 
-async function notionQ(dbId,filter,sorts){const body={};if(filter)body.filter=filter;if(sorts)body.sorts=sorts;const r=await fetch("/netlify/functions/notion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:"/v1/databases/"+dbId+"/query",method:"POST",body})});return r.json();}
-async function notionCreate(dbId,props){const r=await fetch("/netlify/functions/notion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:"/v1/pages",method:"POST",body:{parent:{database_id:dbId},properties:props}})});return r.json();}
+async function notionQ(dbId,filter,sorts){const body={};if(filter)body.filter=filter;if(sorts)body.sorts=sorts;const r=await fetch("/functions/notion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:"/v1/databases/"+dbId+"/query",method:"POST",body})});return r.json();}
+async function notionCreate(dbId,props){const r=await fetch("/functions/notion",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({path:"/v1/pages",method:"POST",body:{parent:{database_id:dbId},properties:props}})});return r.json();}
 
 async function callClaude(sys,user){
-  const r=await fetch("/netlify/functions/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:[{role:"user",content:user}]})});
+  const r=await fetch("/functions/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:[{role:"user",content:user}]})});
   const text = await r.text();
   const d = JSON.parse(text);
   return d.content?.[0]?.text||"";
